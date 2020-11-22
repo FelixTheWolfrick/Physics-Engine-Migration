@@ -16,8 +16,9 @@ public class Bullets : MonoBehaviour
     public GameObject rightBoundry;
     public GameObject leftBoundry;
 
-    GameObject[] bullets;
+    GameObject[] randomParticles;
     GameObject[] targets;
+    public GameObject gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -28,8 +29,11 @@ public class Bullets : MonoBehaviour
         leftBoundry = GameObject.Find("LeftBoundry");
         rightBoundry = GameObject.Find("RightBoundry");
 
+        //Set Game Manager
+        gameManager = GameObject.Find("Player");
+
         //Get Components
-        if(forceGen)
+        if (forceGen)
         {
             forceGen = gameObject.GetComponent<ForceGenerator2D>();
         }
@@ -58,7 +62,7 @@ public class Bullets : MonoBehaviour
     }
 
     //Delete if off screen
-    void DeleteBullet() //Fix this later
+    void DeleteBullet() 
     {
         //If it's past the screen, delete it
         if(gameObject.transform.position.y > topBoundry.transform.position.y || gameObject.transform.position.y < bottomBoundry.transform.position.y
@@ -67,26 +71,39 @@ public class Bullets : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //If it hits another bullet delete it
-        //bullets = GameObject.FindGameObjectsWithTag("Bullet");
+        //If it hits a taret delete it
+        targets = GameObject.FindGameObjectsWithTag("Target");
 
-        //foreach (GameObject bullet in bullets)
-        //{
-        //    if (Vector2.Distance(bullet.transform.position, gameObject.transform.position) < 1.2)
-        //    {
-        //        Destroy(gameObject);
-        //    }
-        //}
+        foreach (GameObject target in targets)
+        {
+            if (gameObject != target)
+            {
+                if (Vector2.Distance(target.transform.position, gameObject.transform.position) < 1.2)
+                {
+                    Debug.Log("Hit the target");
+                    gameManager.GetComponent<GameManager>().isTarget = false;
+                    //Destroy(target);
+                    Destroy(gameObject);
+                    Destroy(target);
+                }
+            }
+        }
 
-        ////If it hits a taret delete it
-        //targets = GameObject.FindGameObjectsWithTag("Target");
+        //If it hits a random particle delete it
+        randomParticles = GameObject.FindGameObjectsWithTag("RandomParticle");
 
-        //foreach (GameObject target in targets)
-        //{
-        //    if (Vector2.Distance(target.transform.position, gameObject.transform.position) < 1.2)
-        //    {
-        //        Destroy(gameObject);
-        //    }
-        //}
+        foreach (GameObject randomParticle in randomParticles)
+        {
+            if (gameObject != randomParticle)
+            {
+                if (Vector2.Distance(randomParticle.transform.position, gameObject.transform.position) < 1.2)
+                {
+                    Debug.Log("Hit a random particle");
+                    //Destroy(target);
+                    Destroy(gameObject);
+                    Destroy(randomParticle);
+                }
+            }
+        }
     }
 }

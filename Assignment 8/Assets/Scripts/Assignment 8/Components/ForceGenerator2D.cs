@@ -20,6 +20,11 @@ public class ForceGenerator2D : MonoBehaviour
     {
         gameObject1.GetComponent<Particle2D>().accumulatedForces += force;
     }
+
+    public void resetForce(GameObject gameObject1)
+    {
+        gameObject1.GetComponent<Particle2D>().accumulatedForces = new Vector2(0, 0);
+    }
 }
 
 //Point Force Generator

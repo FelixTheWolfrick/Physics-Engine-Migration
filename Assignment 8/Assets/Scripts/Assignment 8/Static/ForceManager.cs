@@ -55,10 +55,7 @@ public class ForceManager : MonoBehaviour
                         return;
                     }
 
-                    if (!particle.ignoreForces)
-                    {
-                        generator.UpdateForce(particle.gameObject);
-                    }
+                    generator.UpdateForce(particle.gameObject);
                 }
             }
         }

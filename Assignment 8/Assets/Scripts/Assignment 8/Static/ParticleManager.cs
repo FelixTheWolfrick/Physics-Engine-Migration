@@ -6,71 +6,65 @@ public class ParticleManager : MonoBehaviour
 {
     //Variables
     private static Particle2D instance;
-    private static Particle2D Instance { get { return instance; } }
+    public static Particle2D Instance { get { return instance; } }
 
-    List<GameObject> aliveParticles = new List<GameObject>();
-    List<GameObject> deadParticles = new List<GameObject>();
+    public List<Particle2D> aliveParticles = new List<Particle2D>();
+    List<Particle2D> deadParticles = new List<Particle2D>();
     //Controls manager;
     public GameObject manager;
     //Target targetHit;
-    GameObject[] bullets;
+    Particle2D[] particleList;
 
     // Start is called before the first frame update
     void Start()
     {
-        //manager = GameObject.Find("Manager").GetComponent<Controls>();
+        //AddParticle();
     }
 
     // Update is called once per frame
     void Update()
     {
+        AddParticle();
         UpdateParticles();
     }
 
     //Add Particle
-    public void AddParticle(GameObject particle)
+    public void AddParticle()
     {
-        aliveParticles.Add(particle);
+        particleList = (Particle2D[])(GameObject.FindObjectsOfType(typeof(Particle2D)));
+
+        foreach (Particle2D particleAdd in particleList)
+        {
+            aliveParticles.Add(particleAdd);
+        }
     }
 
     //Remove Particle
-    public void RemoveParticle(GameObject particle)
+    public void RemoveParticle(Particle2D particle)
     {
-        if(particle && particle.tag == "Target")
-        {
-            manager.GetComponent<GameManager>().isTarget = false;
-        }
-
         deadParticles.Remove(particle);
-        Destroy(particle);
+        Destroy(particle.gameObject);
     }
 
     //Update Particles
     public void UpdateParticles()
     {
-        foreach(GameObject particle in aliveParticles)
+        foreach(Particle2D particleOne in aliveParticles)
         {
-            foreach(GameObject particle2 in aliveParticles)
+            foreach(Particle2D particleTwo in aliveParticles)
             {
-                if (particle == null)
-                {
-                    deadParticles.Add(particle);
-                }
-                else if (particle2 == null)
-                {
-                    deadParticles.Add(particle2);
-                }
-                else if(CollisionCheck() == true)
-                {
-                    //Delete both particles
-                    deadParticles.Add(particle);
-                    deadParticles.Add(particle2);
-
-                }
+                //if (CheckCollision.CollisionCheck(particleOne, particleTwo))
+                //{
+                //    if (particleOne != particleTwo) //Make sure it doesn't detect itself
+                //    {
+                //        deadParticles.Add(particleOne);
+                //        deadParticles.Add(particleTwo);
+                //    }
+                //}
             }
         }
 
-        foreach(GameObject particle in deadParticles)
+        foreach(Particle2D particle in deadParticles)
         {
             RemoveParticle(particle);
         }
@@ -79,23 +73,23 @@ public class ParticleManager : MonoBehaviour
     }
 
     //Collision
-    public bool CollisionCheck()
-    {
-        //Get all bullets on screen
-        bullets = GameObject.FindGameObjectsWithTag("Bullet");
+    //public bool CollisionCheck()
+    //{
+    //    //Get all bullets on screen
+    //    bullets = (Particle2D[])(GameObject.FindObjectsOfType(typeof(Particle2D)));
 
-        foreach (GameObject bullet in bullets)
-        {
-            if (Vector2.Distance(bullet.transform.position, gameObject.transform.position) < 0.2)
-            {
-                Debug.Log("True");
-                manager.GetComponent<GameManager>().score++;
-                manager.GetComponent<GameManager>().scoreText.text = manager.GetComponent<GameManager>().score.ToString();
-                Destroy(gameObject);
-                return true;
-            }
-        }
+    //    foreach (Particle2D bullet in bullets)
+    //    {
+    //        if (Vector2.Distance(bullet.transform.position, gameObject.transform.position) < 0.2)
+    //        {
+    //            Debug.Log("True");
+    //            manager.GetComponent<GameManager>().score++;
+    //            manager.GetComponent<GameManager>().scoreText.text = manager.GetComponent<GameManager>().score.ToString();
+    //            Destroy(gameObject);
+    //            return true;
+    //        }
+    //    }
 
-        return false;
-    }
+    //    return false;
+    //}
 }

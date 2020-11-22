@@ -14,11 +14,17 @@ public class Particle2D : MonoBehaviour
     public float speed;
     public bool ignoreForces;
     public Integrator integrator;
+    public float radius;
 
     // Start is called before the first frame update
     void Start()
     {
+        //Set Integrator
         integrator = GameObject.Find("Integrator").GetComponent<Integrator>();
+
+        //Get Radius
+        SpriteRenderer particleRender = gameObject.GetComponent<SpriteRenderer>();
+        radius = particleRender.bounds.extents.x;
     }
 
     // Update is called once per frame

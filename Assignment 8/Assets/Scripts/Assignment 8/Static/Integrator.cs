@@ -9,9 +9,10 @@ public class Integrator : MonoBehaviour
     //Variables
     private static Integrator instance;
     public static Integrator Instance { get { return instance; } }
-    public List<Particle2D> mParticles = new List<Particle2D>();
+    //public List<Particle2D> mParticles = new List<Particle2D>();
 
     Particle2D particle;
+    public ParticleManager particleManager;
 
     //Called when first loaded
     private void Awake()
